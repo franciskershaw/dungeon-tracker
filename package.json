@@ -1,0 +1,33 @@
+{
+  "name": "dungeon-tracker",
+  "version": "1.0.0",
+  "description": "A tool/helper to track custom stats and attributes in real time while playing dunegons and dragons",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franciskershaw/dungeon-tracker.git"
+  },
+  "author": "Francis Kershaw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/franciskershaw/dungeon-tracker/issues"
+  },
+  "homepage": "https://github.com/franciskershaw/dungeon-tracker#readme",
+  "devDependencies": {
+    "concurrently": "^7.2.1",
+    "nodemon": "^2.0.16"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.6"
+  }
+}
