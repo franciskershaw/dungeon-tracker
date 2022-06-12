@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/User')
 
-const protectRoute = asyncHandler(async (req, res, next) => {
+const isLoggedIn = asyncHandler(async (req, res, next) => {
   let token
 
   if (
@@ -31,4 +31,12 @@ const protectRoute = asyncHandler(async (req, res, next) => {
   }
 })
 
-module.exports = { protectRoute }
+const isCampaignAdmin = asyncHandler(async (req, res, next) => {
+  console.log('Checking you are the dungeon master')
+})
+
+const isInCampaign = asyncHandler(async (req, res, next) => {
+  console.log('Checking you are part of this campaign')
+})
+
+module.exports = { isLoggedIn }
