@@ -1,12 +1,14 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
 const path = require('path');
+const connectDB = require('./config/db');
 const colors = require('colors');
 
 // Grab port info from config
 const PORT = process.env.PORT || 5000;
 
 // Connect to Mongo
+connectDB();
 
 // Initialize app
 const app = express();
@@ -31,7 +33,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-
 // Listen for app
 
-app.listen(PORT, console.log(`Server runniing in ${process.env.NODE_ENV} mode on port ${PORT}`))
+app.listen(
+  PORT,
+  console.log(`Server runniing in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);
