@@ -53,6 +53,27 @@ router.post('/', asyncHandler(async (req, res) => {
 }))
 
 // Login a user
+router.post('/login', asyncHandler(async (req, res) => {
+	try {
+			const { email, password } = req.body;
+
+			const user = await User.findOne({ email })
+			
+			// Check credentials match
+			if (user && (await bcrypt.compare(password, user.password))) {
+					res.status(200).json({
+							_id: user._id,
+							email: user.email,
+							token: generateToken(user._id),
+					})
+			} else {
+					res.status(401).json({message: 'Invalid credentials'})
+					throw new Error('Invalid credentials')
+			}
+	} catch (err) {
+			console.log(err)
+	}
+}))
 
 // Generate token
 const generateToken = (id) => {
