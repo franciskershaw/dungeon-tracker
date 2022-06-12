@@ -3,18 +3,22 @@ const mongoose = require('mongoose');
 const CharacterSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   maxHp: {
     type: Number,
-    required: true
+    required: true,
   },
   currentHp: {
     type: Number,
   },
   maxHitDice: {
     type: Number,
-    required: true
+    required: true,
   },
   currentHitDice: {
     type: Number,
