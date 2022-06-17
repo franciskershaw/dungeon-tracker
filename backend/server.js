@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
 const path = require('path');
+const http = require('http');
+const socketio = require('socket.io');
 const connectDB = require('./config/db');
 const colors = require('colors');
 
@@ -12,6 +14,8 @@ connectDB();
 
 // Initialize app
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 
 // Body parser
 app.use(express.urlencoded({ extended: false }));
@@ -26,6 +30,7 @@ if (process.env.NODE_ENV === 'production') {
   // Set build folder as static
   app.use(express.static(path.join(__dirname, '../frontend/build')));
 
+  // Serve index.html
   app.get('*', (req, res) =>
     res.sendFile(__dirname, '../', 'frontend', 'build', 'index.html')
   );
