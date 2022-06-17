@@ -75,6 +75,17 @@ router.post('/login', asyncHandler(async (req, res) => {
 	}
 }))
 
+// Get all users
+router.get('/', asyncHandler(async (req, res) => {
+	try {
+		const users = await User.find()
+		res.status(200).json(users)
+	} catch (err) {
+		console.log(err)
+		res.status(400).json({message: "Can't find users"})
+	}
+}))
+
 // Generate token
 const generateToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
