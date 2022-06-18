@@ -13,6 +13,12 @@ const CampaignSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
 		required: true
   },
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
   characters: [
     {
       type: mongoose.Schema.Types.ObjectId,
