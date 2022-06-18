@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const asyncHandler = require('express-async-handler');
-const { uuid } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 
 const { isLoggedIn } = require('../middleware/authMiddleware');
 
@@ -24,7 +24,8 @@ router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 	try {
 		const campaign = new Campaign(req.body)
 		const user = await User.findById(req.user._id)
-		campaign.uniqueCode = uuid();
+		campaign.uniqueCode = uuidv4();
+		campaign.users.push(user._id)
 		campaign.admin = user._id
 		await campaign.save();
 		user.campaigns.push(campaign._id)
@@ -57,36 +58,39 @@ router.get('/join', isLoggedIn, asyncHandler(async (req, res) => {
 	const campaign = await Campaign.find({ uniqueCode })
 	
 	if (campaign.length < 1) {
-		res.status(401).json({msg: 'This campaign code does not exist'})
+		res.status(401)
+		throw new Error('This campaign code does not exist')
 	} else {
 		res.status(200).json(campaign)
 	}
 }))
 
-// Edit a campaign (including adding new users/characters)
+// Edit a campaign
 router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
-	try {
-		const user = await User.findById(req.user._id)
-		const campaign = await Campaign.findById(req.params.campaignId)
-		
-		console.log(user)
-		console.log(campaign)
-		
-		res.status(200).json({userEditting: user, campaignToBeEditted: campaign})
-	} catch (err) {
-		console.log(err)
-		throw new Error(err)
+	let user
+	if (req.user) {
+		user = await User.findById(req.user.id)
+	} else {
+		throw new Error('No user?')
+	}
+	const campaign = await Campaign.findById(req.params.campaignId)
+	console.log(user.id)
+	
+	if (!campaign) {
+		res.status(404)
+		throw new Error('Campaign not found')
+	}
+
+	const adminId = campaign.admin.toString()
+	
+	if (campaign.users.includes(req.user.id)) {
+		// do the edit here
+		res.status(200).json({user: user, campaign: campaign})
+	} else {
+		throw new Error('You can only edit campaigns in which you have joined')
 	}
 }))
 
-// Join a campaign
-router.put('/', isLoggedIn, asyncHandler(async (req, res) => {
-	try {
-		
-	} catch (err) {
-		
-	}
-}))
 
 // Delete campaign (as long as you are logged in and are the admin)
 // router.delete('/:campaignId', isLoggedIn, isAdmin, asyncHandler(asyncHandler (req, res) => {
