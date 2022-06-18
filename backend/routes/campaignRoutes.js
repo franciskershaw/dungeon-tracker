@@ -38,7 +38,7 @@ router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 }))
 
 // Get a user's available campaigns
-router.get('/:userId', isLoggedIn, asyncHandler(async (req, res) => {
+router.get('/user/:userId', isLoggedIn, asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findById(req.params.userId);
 		if (!user) {
@@ -51,7 +51,19 @@ router.get('/:userId', isLoggedIn, asyncHandler(async (req, res) => {
 	}
 }))
 
-// Edit a campaign 
+// Get a specific campaign from the unique code
+router.get('/join', isLoggedIn, asyncHandler(async (req, res) => {
+	const uniqueCode = req.body.uniqueCode
+	const campaign = await Campaign.find({ uniqueCode })
+	
+	if (campaign.length < 1) {
+		res.status(401).json({msg: 'This campaign code does not exist'})
+	} else {
+		res.status(200).json(campaign)
+	}
+}))
+
+// Edit a campaign (including adding new users/characters)
 router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findById(req.user._id)
@@ -68,7 +80,7 @@ router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
 }))
 
 // Join a campaign
-router.put('/:uniqueCode', isLoggedIn, asyncHandler(async (req, res) => {
+router.put('/', isLoggedIn, asyncHandler(async (req, res) => {
 	try {
 		
 	} catch (err) {
