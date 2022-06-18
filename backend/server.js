@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
   // Set build folder as static
   app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-  // Serve index.html
+  // Serve index.html from build folder
   app.get('*', (req, res) =>
     res.sendFile(__dirname, '../', 'frontend', 'build', 'index.html')
   );
@@ -40,9 +40,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Listen for app
+// Listen for server
 
-app.listen(
+server.listen(
   PORT,
   console.log(`Server runniing in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
