@@ -23,12 +23,12 @@ router.get('/', asyncHandler(async (req, res) => {
 router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 	try {
 		const campaign = new Campaign(req.body)
-		const user = await User.findById(req.user._id)
+		const user = await User.findById(req.user.id)
 		campaign.uniqueCode = uuidv4();
-		campaign.users.push(user._id)
-		campaign.admin = user._id
+		campaign.users.push(user.id)
+		campaign.admin = user.id
 		await campaign.save();
-		user.campaigns.push(campaign._id)
+		user.campaigns.push(campaign.id)
 		await user.save()
 		
 		res.status(201).json(campaign)
