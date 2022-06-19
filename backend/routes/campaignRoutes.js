@@ -74,21 +74,25 @@ router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
 		throw new Error('No user?')
 	}
 	const campaign = await Campaign.findById(req.params.campaignId)
-	console.log(user.id)
 	
 	if (!campaign) {
 		res.status(404)
 		throw new Error('Campaign not found')
 	}
-
-	const adminId = campaign.admin.toString()
 	
-	if (campaign.users.includes(req.user.id)) {
-		// do the edit here
-		res.status(200).json({user: user, campaign: campaign})
-	} else {
-		throw new Error('You can only edit campaigns in which you have joined')
-	}
+	if (!campaign.users.includes(req.user.id)) {
+		res.status(401)
+		throw new Error('You can only edit campaigns you have joined or are admin for')
+	} 
+
+	const updatedCampaign = await Campaign.findByIdAndUpdate(
+    req.params.campaignId,
+    {...req.body},
+    { new: true }
+  )
+	
+	res.status(200).json(updatedCampaign)
+
 }))
 
 
