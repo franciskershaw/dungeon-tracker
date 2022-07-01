@@ -98,11 +98,9 @@ router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
 
 // Delete campaign (as long as you are logged in and are the admin)
 router.delete('/:campaignId', isLoggedIn, isCampaignAdmin, asyncHandler (async(req, res) => {
-	console.log('Trying to delete a campaign')
-	res.status(200).json({msg: 'Delete route'})
+	const { campaignId } = req.params
+	await Campaign.findByIdAndDelete(campaignId);
+	res.status(200).json({msg: 'Deleted campaign'})
 }))
-
-
-
 
 module.exports = router;
