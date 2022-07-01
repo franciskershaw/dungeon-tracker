@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
+
 const User = require('../models/User')
+const Character = require('../models/Character')
 
 const isLoggedIn = asyncHandler(async (req, res, next) => {
   let token
@@ -31,6 +33,10 @@ const isLoggedIn = asyncHandler(async (req, res, next) => {
   }
 })
 
+const isCharacterCreator = async (req, res, next) =>{
+  console.log('Checking this is your character')
+}
+
 const isCampaignAdmin = asyncHandler(async (req, res, next) => {
   console.log('Checking you are the dungeon master')
 })
@@ -39,4 +45,4 @@ const isInCampaign = asyncHandler(async (req, res, next) => {
   console.log('Checking you are part of this campaign')
 })
 
-module.exports = { isLoggedIn }
+module.exports = { isLoggedIn, isCharacterCreator, isCampaignAdmin, isInCampaign }
