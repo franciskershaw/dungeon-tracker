@@ -44,7 +44,7 @@ const isCharacterCreator = async (req, res, next) =>{
       next()
     } else {
       res.status(401)
-      throw new Error('This is not your character to create')
+      throw new Error('This is not your character to edit')
     }
   } catch (err) {
     next(err)  

@@ -56,4 +56,11 @@ router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, re
 	}
 }))
 
+// Delete a character (and therefore leave the campaign)
+router.delete('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
+	console.log(`Attempting to delete character ${req.params.characterId}`)
+	const { characterId } = req.params;
+	res.status(200).json(characterId)
+}))
+
 module.exports = router;

@@ -1,23 +1,29 @@
 const mongoose = require('mongoose');
+const Character = require('./Character');
+const User = require('./User');
+const LootItem = require('./LootItem');
+const MagicItem = require('./MagicItem');
+const Quest = require('./Quest');
+const NonPlayableCharacter = require('./NonPlayableCharacter');
 
 const CampaignSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   uniqueCode: {
     type: String,
-    required: true
+    required: true,
   },
   admin: {
     type: mongoose.Schema.Types.ObjectId,
-		required: true
+    required: true,
   },
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   ],
   characters: [
     {
@@ -49,6 +55,46 @@ const CampaignSchema = mongoose.Schema({
       ref: 'NonPlayableCharacter',
     },
   ],
+});
+
+CampaignSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    await Character.deleteMany({
+      _id: {
+        $in: doc.characters,
+      },
+    });
+    await LootItem.deleteMany({
+      _id: {
+        $in: doc.lootItems,
+      },
+    });
+    await MagicItem.deleteMany({
+      _id: {
+        $in: doc.magicItems,
+      },
+    });
+    await Quest.deleteMany({
+      _id: {
+        $in: doc.quests,
+      },
+    });
+    await NonPlayableCharacter.deleteMany({
+      _id: {
+        $in: doc.nonPlayableCharacters,
+      },
+    });
+    await User.updateMany(
+      { campaigns: { $in: doc._id } },
+      { $pull: { campaigns: doc._id } }
+    );
+    // THIS NEXT ONE DOESN'T WORK YET
+    await User.updateMany(
+      { characters: { $in: doc._id } },
+      { $pull: { campaigns: doc._id } }
+    );
+    
+  }
 });
 
 module.exports = mongoose.model('Campaign', CampaignSchema);
