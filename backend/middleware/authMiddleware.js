@@ -34,7 +34,20 @@ const isLoggedIn = asyncHandler(async (req, res, next) => {
 })
 
 const isCharacterCreator = async (req, res, next) =>{
-  console.log('Checking this is your character')
+
+  const { characterId } = req.params
+  const character = await Character.findById(characterId)
+
+  try {
+    if(character.createdBy.equals(req.user.id)) {
+      next()
+    } else {
+      res.status(401)
+      throw new Error('This is not your character to create')
+    }
+  } catch (err) {
+    next(err)  
+  }
 }
 
 const isCampaignAdmin = asyncHandler(async (req, res, next) => {
