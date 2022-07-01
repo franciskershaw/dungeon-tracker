@@ -70,6 +70,24 @@ const isCampaignAdmin = asyncHandler(async (req, res, next) => {
 
 const isInCampaign = asyncHandler(async (req, res, next) => {
   console.log('Checking you are part of this campaign')
+  const { campaignId } = req.params
+  const campaign = await Campaign.findById(campaignId)
+  
+  // console.log(`admin: ${campaign.admin}`)
+  // console.log(`campaignId: ${campaignId}`)
+  // console.log(`user logged in: ${req.user.id}`)
+
+  try {
+    if (campaign.users.includes(req.user.id)) {
+      console.log("You're in buddy")
+      next()
+    } else {
+      res.status(401)
+      throw new Error("You're not part of this campaign")
+    }
+  } catch (err) {
+    next(err)
+  }
 })
 
 module.exports = { isLoggedIn, isCharacterCreator, isCampaignAdmin, isInCampaign }

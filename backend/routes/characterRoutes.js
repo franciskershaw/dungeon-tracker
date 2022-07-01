@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const asyncHandler = require('express-async-handler');
 
-const { isLoggedIn, isCharacterCreator } = require('../middleware/authMiddleware');
+const { isLoggedIn, isCharacterCreator, isInCampaign } = require('../middleware/authMiddleware');
 
 const User = require('../models/User');
 const Campaign = require('../models/Campaign');
@@ -36,11 +36,17 @@ router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 	}
 }))
 
-
+// Edit a character (as long as you own that character)
 router.put('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
 		const { characterId } = req.params;
 		const character = await Character.findByIdAndUpdate(characterId, { ...req.body })
 		res.status(200).json(character)	
+}))
+
+// Get all characters on a specific campaign
+router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	console.log(`Attempting to get all characters from campaign ${req.params.campaignId}`)
+	res.status(200).json({msg: 'Getting characters'})
 }))
 
 module.exports = router;
