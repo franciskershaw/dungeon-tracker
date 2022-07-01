@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler')
 
 const User = require('../models/User')
 const Character = require('../models/Character')
+const Campaign = require('../models/Campaign')
 
 const isLoggedIn = asyncHandler(async (req, res, next) => {
   let token
@@ -51,7 +52,20 @@ const isCharacterCreator = async (req, res, next) =>{
 }
 
 const isCampaignAdmin = asyncHandler(async (req, res, next) => {
-  console.log('Checking you are the dungeon master')
+  
+  const { campaignId } = req.params
+  const campaign = await Campaign.findById(campaignId)
+  
+  try {
+    if(campaign.admin.equals(req.user.id)) {
+      next()
+    } else {
+      res.status(401)
+      throw new Error('You need to be the admin to delete this campaign')
+    }
+  } catch (err) {
+    next(err)
+  }
 })
 
 const isInCampaign = asyncHandler(async (req, res, next) => {

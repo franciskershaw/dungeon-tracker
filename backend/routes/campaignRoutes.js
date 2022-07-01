@@ -3,7 +3,7 @@ const router = express.Router();
 const asyncHandler = require('express-async-handler');
 const { v4: uuidv4 } = require('uuid');
 
-const { isLoggedIn } = require('../middleware/authMiddleware');
+const { isLoggedIn, isCampaignAdmin } = require('../middleware/authMiddleware');
 
 const User = require('../models/User');
 const Campaign = require('../models/Campaign');
@@ -97,9 +97,12 @@ router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
 
 
 // Delete campaign (as long as you are logged in and are the admin)
-// router.delete('/:campaignId', isLoggedIn, isAdmin, asyncHandler(asyncHandler (req, res) => {
+router.delete('/:campaignId', isLoggedIn, isCampaignAdmin, asyncHandler (async(req, res) => {
+	console.log('Trying to delete a campaign')
+	res.status(200).json({msg: 'Delete route'})
+}))
 
-// }))
+
 
 
 module.exports = router;
