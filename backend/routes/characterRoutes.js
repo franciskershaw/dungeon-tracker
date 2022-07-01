@@ -46,7 +46,14 @@ router.put('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (
 // Get all characters on a specific campaign
 router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 	console.log(`Attempting to get all characters from campaign ${req.params.campaignId}`)
-	res.status(200).json({msg: 'Getting characters'})
+	try {
+		const campaign = await Campaign.findById(req.params.campaignId)
+		const characters = await Character.find({_id: campaign.characters})
+		res.status(200).json(characters)
+	} catch (err) {
+		console.log(err)
+		throw new Error(err)
+	}
 }))
 
 module.exports = router;
