@@ -86,14 +86,12 @@ CampaignSchema.post('findOneAndDelete', async function (doc) {
     });
     await User.updateMany(
       { campaigns: { $in: doc._id } },
-      { $pull: { campaigns: doc._id } }
+      { $pull: { characters: { $in: doc.characters } } }
     );
-    // THIS NEXT ONE DOESN'T WORK YET
     await User.updateMany(
-      { characters: { $in: doc._id } },
+      { campaigns: { $in: doc._id } },
       { $pull: { campaigns: doc._id } }
     );
-    
   }
 });
 
