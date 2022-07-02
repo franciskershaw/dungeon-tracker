@@ -10,30 +10,37 @@ const Character = require('../models/Character')
 
 // Create character, which also amends campaign to include the user and new character ids
 router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
+	const user = await User.findById(req.user.id)
+	const campaign = await Campaign.findById(req.body.campaignId)
 	try {
-		const character = new Character(req.body)
-		const user = await User.findById(req.user.id)
-		const campaign = await Campaign.findById(req.body.campaignId)
+		if (!campaign.users.includes(req.user.id)) {
+			console.log('User not in campaign')
+			const character = new Character(req.body)
 
-		character.createdBy = user.id;
-		character.currentHp = req.body.maxHp
-		character.currentHitDice = req.body.maxHitDice
-		character.campaign = req.body.campaignId
+			character.createdBy = user.id;
+			character.currentHp = req.body.maxHp
+			character.currentHitDice = req.body.maxHitDice
+			character.campaign = req.body.campaignId
 
-		user.characters.push(character.id)
-		user.campaigns.push(campaign.id)
+			user.characters.push(character.id)
+			user.campaigns.push(campaign.id)
 
-		campaign.characters.push(character.id)
-		campaign.users.push(user.id)
+			campaign.characters.push(character.id)
+			campaign.users.push(user.id)
 
-		await character.save()
-		await campaign.save()
-		await user.save()
+			await character.save()
+			await campaign.save()
+			await user.save()
 
-		res.status(201).json(character)
+			res.status(201).json(character)
+		} else {
+			console.log('User already in campaign')
+			res.status(400)
+			throw new Error('User already in campaign')
+		}
 	} catch (err) {
 		console.log(err)
-		throw new Error('Unable to create a new character')
+		throw new Error(err)
 	}
 }))
 
@@ -59,7 +66,6 @@ router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, re
 
 // Delete a character (and therefore leave the campaign)
 router.delete('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
-	console.log(`Attempting to delete character ${req.params.characterId}`)
 	const { characterId } = req.params;
 	await Character.findByIdAndDelete(characterId)
 	res.status(200).json(characterId)
