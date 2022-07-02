@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const CustomStat = require('./CustomStat');
+const MagicItem = require('./MagicItem');
+const Campaign = require('./Campaign');
 
 const CharacterSchema = mongoose.Schema({
   name: {
@@ -35,6 +38,27 @@ const CharacterSchema = mongoose.Schema({
       ref: 'MagicItem',
     },
   ],
+});
+
+CharacterSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    await CustomStat.deleteMany({
+      _id: {
+        $in: doc.customStats,
+      },
+    });
+    await MagicItem.deleteMany({
+      _id: {
+        $in: doc.magicItems,
+      },
+    });
+    await Campaign.updateOne({
+
+    });
+    await User.updateOne({
+      
+    })
+  }
 });
 
 module.exports = mongoose.model('Character', CharacterSchema);
