@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const CustomStat = require('./CustomStat');
 const MagicItem = require('./MagicItem');
 const Campaign = require('./Campaign');
+const User = require('./User');
 
 const CharacterSchema = mongoose.Schema({
   name: {
@@ -11,6 +12,10 @@ const CharacterSchema = mongoose.Schema({
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+  },
+  campaign: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Campaign',
   },
   maxHp: {
     type: Number,
@@ -52,12 +57,23 @@ CharacterSchema.post('findOneAndDelete', async function (doc) {
         $in: doc.magicItems,
       },
     });
-    await Campaign.updateOne({
-
-    });
-    await User.updateOne({
-      
-    })
+    await Campaign.updateOne(
+      { _id: doc.campaign },
+      { $pull: { characters: doc._id } }
+    );
+    await Campaign.updateOne(
+      { _id: doc.campaign },
+      { $pull: { users: doc.createdBy } }
+    );
+    // needs to pull the character id and campaign id from user document
+    await User.updateOne(
+      { _id: doc.createdBy },
+      { $pull: { campaigns: doc.campaign } }
+    );
+    await User.updateOne(
+      { _id: doc.createdBy },
+      { $pull: { characters: doc._id } }
+    );
   }
 });
 

@@ -18,6 +18,7 @@ router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 		character.createdBy = user.id;
 		character.currentHp = req.body.maxHp
 		character.currentHitDice = req.body.maxHitDice
+		character.campaign = req.body.campaignId
 
 		user.characters.push(character.id)
 		user.campaigns.push(campaign.id)
@@ -60,6 +61,7 @@ router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, re
 router.delete('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
 	console.log(`Attempting to delete character ${req.params.characterId}`)
 	const { characterId } = req.params;
+	await Character.findByIdAndDelete(characterId)
 	res.status(200).json(characterId)
 }))
 

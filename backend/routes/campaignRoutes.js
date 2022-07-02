@@ -100,7 +100,7 @@ router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
 router.delete('/:campaignId', isLoggedIn, isCampaignAdmin, asyncHandler (async(req, res) => {
 	const { campaignId } = req.params
 	await Campaign.findByIdAndDelete(campaignId);
-	res.status(200).json({msg: 'Deleted campaign'})
+	res.status(200).json({campaignId})
 }))
 
 module.exports = router;
