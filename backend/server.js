@@ -26,6 +26,7 @@ app.use(express.json());
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/campaigns', require('./routes/campaignRoutes'));
 app.use('/api/characters', require('./routes/characterRoutes'));
+app.use('/api/customStats', require('./routes/customStatRoutes'));
 
 app.use(errorHandler)
 
