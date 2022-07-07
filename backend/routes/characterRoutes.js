@@ -14,7 +14,6 @@ router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 	const campaign = await Campaign.findById(req.body.campaignId)
 	try {
 		if (!campaign.users.includes(req.user.id)) {
-			console.log('User not in campaign')
 			const character = new Character(req.body)
 
 			character.createdBy = user.id;

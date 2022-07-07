@@ -4,8 +4,14 @@ const express = require('express');
 const router = express.Router();
 const asyncHandler = require('express-async-handler');
 
+const User = require('../models/User');
+
+const { isLoggedIn } = require('../middleware/authMiddleware');
+
 // Add new stat
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/:characterId', isLoggedIn, asyncHandler(async (req, res) => {
+	const user = await User.findById(req.user.id)
+	console.log(user)
 	res.status(200).json({msg: 'attempting to create stat'})
 }))
 

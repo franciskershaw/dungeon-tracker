@@ -1,10 +1,4 @@
 const mongoose = require('mongoose');
-const Character = require('./Character');
-const User = require('./User');
-const LootItem = require('./LootItem');
-const MagicItem = require('./MagicItem');
-const Quest = require('./Quest');
-const NonPlayableCharacter = require('./NonPlayableCharacter');
 
 const CampaignSchema = mongoose.Schema({
   name: {
@@ -96,3 +90,9 @@ CampaignSchema.post('findOneAndDelete', async function (doc) {
 });
 
 module.exports = mongoose.model('Campaign', CampaignSchema);
+const Character = require('./Character');
+const User = require('./User');
+const LootItem = require('./LootItem');
+const MagicItem = require('./MagicItem');
+const Quest = require('./Quest');
+const NonPlayableCharacter = require('./NonPlayableCharacter');

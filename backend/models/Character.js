@@ -1,8 +1,4 @@
 const mongoose = require('mongoose');
-const CustomStat = require('./CustomStat');
-const MagicItem = require('./MagicItem');
-const Campaign = require('./Campaign');
-const User = require('./User');
 
 const CharacterSchema = mongoose.Schema({
   name: {
@@ -78,3 +74,7 @@ CharacterSchema.post('findOneAndDelete', async function (doc) {
 });
 
 module.exports = mongoose.model('Character', CharacterSchema);
+const CustomStat = require('./CustomStat');
+const MagicItem = require('./MagicItem');
+const Campaign = require('./Campaign');
+const User = require('./User');
