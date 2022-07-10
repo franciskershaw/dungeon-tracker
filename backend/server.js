@@ -5,7 +5,7 @@ const http = require('http');
 const socketio = require('socket.io');
 const connectDB = require('./config/db');
 const colors = require('colors');
-const { errorHandler } = require('./middleware/errorMiddleware')
+const { errorHandler } = require('./middleware/errorMiddleware');
 
 // Grab port info from config
 const PORT = process.env.PORT || 5000;
@@ -27,8 +27,9 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/campaigns', require('./routes/campaignRoutes'));
 app.use('/api/characters', require('./routes/characterRoutes'));
 app.use('/api/customStats', require('./routes/customStatRoutes'));
+app.use('/api/magicItems', require('./routes/magicItemRoutes'));
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 // Serve Frontend in production
 if (process.env.NODE_ENV === 'production') {
@@ -48,5 +49,5 @@ if (process.env.NODE_ENV === 'production') {
 // Listen for server
 server.listen(
   PORT,
-  console.log(`Server runniing in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );

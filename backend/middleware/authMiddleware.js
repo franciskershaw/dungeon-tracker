@@ -68,18 +68,28 @@ const isCampaignAdmin = asyncHandler(async (req, res, next) => {
 });
 
 const isInCampaign = asyncHandler(async (req, res, next) => {
-  const { campaignId } = req.params;
+  let campaignId
+  if (req.params.campaignId) {
+    campaignId = req.params.campaignId
+  } else if (req.body.campaignId) {
+    campaignId = req.body.campaignId
+  }
+  
   const campaign = await Campaign.findById(campaignId);
 
   try {
-    if (campaign.users.includes(req.user.id)) {
-      next();
+    if (campaignId) {
+      if (campaign.users.includes(req.user.id)) {
+        next();
+      } else {
+        res.status(401);
+        throw new Error("You're not part of this campaign");
+      }
     } else {
-      res.status(401);
-      throw new Error("You're not part of this campaign");
+      res.status(400)
+      throw new Error("You need to choose which campaign this item belongs to")
     }
   } catch (err) {
-    console.log('caught')
     next(err);
   }
 });

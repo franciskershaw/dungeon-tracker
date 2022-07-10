@@ -18,6 +18,13 @@ const MagicItemSchema = mongoose.Schema({
 	},
 	attuned: {
 		type: Boolean,
+    required: function checkRequired() {
+      if (this.requiresAttuning) {
+        return true;
+      } else {
+        return false;
+      }
+    },
 	},
   hyperlink: {
     type: String,
