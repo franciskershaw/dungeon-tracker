@@ -37,7 +37,9 @@ router.post('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async 
 
 // Delete stat
 router.delete('/:customStatId', isLoggedIn, isStatCreator, asyncHandler(async (req, res) => {
-	res.json({msg: 'Hi'})
+	const { customStatId } = req.params;
+	await CustomStat.findByIdAndDelete(customStatId)
+	res.status(200).json(customStatId)
 }))
 
 // Get stats for specific character
