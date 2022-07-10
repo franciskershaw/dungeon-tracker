@@ -45,14 +45,18 @@ router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 
 // Edit a character (as long as you own that character)
 router.put('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
-		const { characterId } = req.params;
+	const { characterId } = req.params;
+	try {
 		const character = await Character.findByIdAndUpdate(characterId, { ...req.body })
 		res.status(200).json(character)	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
 }))
 
 // Get all characters on a specific campaign
 router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
-	console.log(`Attempting to get all characters from campaign ${req.params.campaignId}`)
 	try {
 		const campaign = await Campaign.findById(req.params.campaignId)
 		const characters = await Character.find({_id: campaign.characters})
@@ -65,9 +69,13 @@ router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, re
 
 // Delete a character (and therefore leave the campaign)
 router.delete('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
-	const { characterId } = req.params;
-	await Character.findByIdAndDelete(characterId)
-	res.status(200).json(characterId)
+	try {
+		const { characterId } = req.params;
+		await Character.findByIdAndDelete(characterId)
+		res.status(200).json(characterId)	
+	} catch (err) {
+		throw new Error(err)
+	}
 }))
 
 module.exports = router;

@@ -56,50 +56,65 @@ router.get('/user/:userId', isLoggedIn, asyncHandler(async (req, res) => {
 router.get('/join', isLoggedIn, asyncHandler(async (req, res) => {
 	const uniqueCode = req.body.uniqueCode
 	const campaign = await Campaign.find({ uniqueCode })
-	
-	if (campaign.length < 1) {
-		res.status(401)
-		throw new Error('This campaign code does not exist')
-	} else {
-		res.status(200).json(campaign)
+
+	try {
+		if (campaign.length < 1) {
+			res.status(404)
+			throw new Error('This campaign code does not exist')
+		} else {
+			res.status(200).json(campaign)
+		}	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
 	}
 }))
 
 // Edit a campaign
 router.put('/:campaignId', isLoggedIn, asyncHandler(async (req, res) => {
 	let user
-	if (req.user) {
-		user = await User.findById(req.user.id)
-	} else {
-		throw new Error('No user?')
-	}
-	const campaign = await Campaign.findById(req.params.campaignId)
-	
-	if (!campaign) {
-		res.status(404)
-		throw new Error('Campaign not found')
-	}
-	
-	if (!campaign.users.includes(req.user.id)) {
-		res.status(401)
-		throw new Error('You can only edit campaigns you have joined or are admin for')
-	} 
 
-	const updatedCampaign = await Campaign.findByIdAndUpdate(
-    req.params.campaignId,
-    {...req.body},
-    { new: true }
-  )
+	try {
+		if (req.user) {
+			user = await User.findById(req.user.id)
+		} else {
+			throw new Error('No user?')
+		}
+		const campaign = await Campaign.findById(req.params.campaignId)
+		
+		if (!campaign) {
+			res.status(404)
+			throw new Error('Campaign not found')
+		}
+		
+		if (!campaign.users.includes(req.user.id)) {
+			res.status(401)
+			throw new Error('You can only edit campaigns you have joined or are admin for')
+		} 
 	
-	res.status(200).json(updatedCampaign)
-
+		const updatedCampaign = await Campaign.findByIdAndUpdate(
+			req.params.campaignId,
+			{...req.body},
+			{ new: true }
+		)
+		
+		res.status(200).json(updatedCampaign)	
+	} catch (err) {
+		res.json(400)
+		throw new Error(err)
+	}
 }))
 
 // Delete campaign (as long as you are logged in and are the admin)
 router.delete('/:campaignId', isLoggedIn, isCampaignAdmin, asyncHandler (async(req, res) => {
 	const { campaignId } = req.params
-	await Campaign.findByIdAndDelete(campaignId);
-	res.status(200).json({campaignId})
+	try {
+		await Campaign.findByIdAndDelete(campaignId);
+		res.status(200).json({campaignId})	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
 }))
 
 module.exports = router;

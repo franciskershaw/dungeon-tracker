@@ -8,7 +8,7 @@ const CustomStat = require('../models/CustomStat')
 const User = require('../models/User');
 const Character = require('../models/Character')
 
-const { isLoggedIn, isCharacterCreator, isStatCreator } = require('../middleware/authMiddleware');
+const { isLoggedIn, isCharacterCreator, isStatCreator, isInCampaign } = require('../middleware/authMiddleware');
 
 // Add new stat
 router.post('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
@@ -38,19 +38,45 @@ router.put('/:customStatId', isLoggedIn, isStatCreator, asyncHandler(async (req,
 	const { customStatId } = req.params;
 	const customStat = await CustomStat.findByIdAndUpdate(customStatId, { ...req.body }, {new: true})
 
-	if (customStat.currentAmount > customStat.maxAmount) {
-		customStat.currentAmount = customStat.maxAmount
+	try {
+		if (customStat.currentAmount > customStat.maxAmount) {
+			customStat.currentAmount = customStat.maxAmount
+		}
+		res.status(200).json(customStat)	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
 	}
-	res.status(200).json(customStat)
 }))
 
 // Delete stat
 router.delete('/:customStatId', isLoggedIn, isStatCreator, asyncHandler(async (req, res) => {
 	const { customStatId } = req.params;
-	await CustomStat.findByIdAndDelete(customStatId)
-	res.status(200).json(customStatId)
+	try {
+		await CustomStat.findByIdAndDelete(customStatId)
+		res.status(200).json(customStatId)	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
 }))
 
 // Get stats for specific character
+router.get('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
+	const { characterId } = req.params;
+	try {
+		const character = await Character.findById(characterId)
+		const stats = await CustomStat.find({ _id: character.customStats })
+		res.status(200).json(stats)	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
+// Get all stats for a party
+router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+
+}))
 
 module.exports = router;
