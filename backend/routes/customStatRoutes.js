@@ -7,6 +7,7 @@ const asyncHandler = require('express-async-handler');
 const CustomStat = require('../models/CustomStat')
 const User = require('../models/User');
 const Character = require('../models/Character')
+const Campaign = require('../models/Campaign');
 
 const { isLoggedIn, isCharacterCreator, isStatCreator, isInCampaign } = require('../middleware/authMiddleware');
 
@@ -62,11 +63,13 @@ router.delete('/:customStatId', isLoggedIn, isStatCreator, asyncHandler(async (r
 }))
 
 // Get stats for specific character
-router.get('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
+router.get('/character/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
 	const { characterId } = req.params;
 	try {
 		const character = await Character.findById(characterId)
+		console.log(character)
 		const stats = await CustomStat.find({ _id: character.customStats })
+		console.log(stats)
 		res.status(200).json(stats)	
 	} catch (err) {
 		res.status(400)
@@ -75,8 +78,25 @@ router.get('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (
 }))
 
 // Get all stats for a party
-router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
-
+router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { campaignId } = req.params;
+	try {
+		const campaign = await Campaign.findById(campaignId)
+		const characters = await Character.find({ _id: campaign.characters })
+		
+		const customStatIds = []
+		characters.forEach((character) => {
+			character.customStats.forEach((customStat) => {
+				customStatIds.push(customStat)
+			})
+		})
+		
+		const customStats = await CustomStat.find({ _id: customStatIds})
+		res.status(200).json(customStats)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
 }))
 
 module.exports = router;

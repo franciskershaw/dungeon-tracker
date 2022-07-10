@@ -79,6 +79,7 @@ const isInCampaign = asyncHandler(async (req, res, next) => {
       throw new Error("You're not part of this campaign");
     }
   } catch (err) {
+    console.log('caught')
     next(err);
   }
 });
