@@ -8,7 +8,7 @@ const CustomStat = require('../models/CustomStat')
 const User = require('../models/User');
 const Character = require('../models/Character')
 
-const { isLoggedIn, isCharacterCreator } = require('../middleware/authMiddleware');
+const { isLoggedIn, isCharacterCreator, isStatCreator } = require('../middleware/authMiddleware');
 
 // Add new stat
 router.post('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
@@ -36,6 +36,9 @@ router.post('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async 
 // Edit stat
 
 // Delete stat
+router.delete('/:customStatId', isLoggedIn, isStatCreator, asyncHandler(async (req, res) => {
+	res.json({msg: 'Hi'})
+}))
 
 // Get stats for specific character
 

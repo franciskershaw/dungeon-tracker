@@ -30,7 +30,18 @@ const CustomStatSchema = mongoose.Schema({
   longRestRestore: {
     type: Boolean,
     required: true,
+  },
+});
+
+// When a stat is deleted, it needs to be removed from the character's customStats array
+CustomStatSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    await Character.updateOne(
+      { _id: doc.character },
+      { $pull: { customStats: doc._id } }
+    );
   }
 });
 
 module.exports = mongoose.model('CustomStat', CustomStatSchema);
+const Character = require('./Character');
