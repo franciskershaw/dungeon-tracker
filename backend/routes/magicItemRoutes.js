@@ -11,24 +11,19 @@ const { isLoggedIn, isInCampaign } = require('../middleware/authMiddleware');
 // Add a new magicItem
 router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 	const campaign = await Campaign.findById(req.body.campaignId)
-	let ownedBy
-
-	if (req.body.campaignId === req.body.ownedBy) {
-		ownedBy = "party"
-	} else {
-		ownedBy = "character"
-	}
 
 	try {
 		const magicItem = new MagicItem(req.body)
-		await campaign.magicItems.push(magicItem._id)
+		campaign.magicItems.push(magicItem._id)
 
-		if (ownedBy === "character") {
+		/* Check whether the item is owned by a specific character or by the party
+			 and ensure character document includes item if it is the former */ 
+		if (req.body.campaignId !== req.body.ownedBy) {
 			let character = await Character.findById(req.body.ownedBy)
 			character.magicItems.push(magicItem._id)
 			await character.save()
-		} else if (ownedBy === "party")
-		
+		}
+	
 		await magicItem.save()
 		await campaign.save()
 		
