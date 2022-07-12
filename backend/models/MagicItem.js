@@ -9,8 +9,13 @@ const MagicItemSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  campaignId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
   ownedBy: {
     type: mongoose.Schema.Types.ObjectId,
+    required: true
   },
   requiresAttuning: {
     type: Boolean,
@@ -37,11 +42,13 @@ MagicItemSchema.post('findOneAndDelete', async function (doc) {
       { _id: doc.ownedBy },
       { $pull: { magicItems: doc._id } }
     );
-    // await Campaign.updateOne(
-    //   { _id: doc.}
-    // )
+    await Campaign.updateOne(
+      { _id: doc.campaignId },
+      { $pull: { magicItems: doc._id } }
+    )
   }
 });
 
 module.exports = mongoose.model('MagicItem', MagicItemSchema);
 const Character = require('./Character');
+const Campaign = require('./Campaign');
