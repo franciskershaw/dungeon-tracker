@@ -39,4 +39,17 @@ router.put('/:lootItemId', isLoggedIn, isInCampaign, asyncHandler(async (req, re
 	}
 }))
 
+// Get party loot items
+router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { campaignId } = req.params;
+	try {
+		const campaign = await Campaign.findById(campaignId)
+		const lootItems = await LootItem.find({ _id: campaign.lootItems })
+		res.status(200).json(lootItems)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
 module.exports = router;
