@@ -6,7 +6,7 @@ const MagicItem = require('../models/MagicItem')
 const Campaign = require('../models/Campaign')
 const Character = require('../models/Character')
 
-const { isLoggedIn, isInCampaign } = require('../middleware/authMiddleware');
+const { isLoggedIn, isInCampaign, canEditMagicItem } = require('../middleware/authMiddleware');
 
 // Add a new magicItem
 router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
@@ -35,6 +35,11 @@ router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 }))
 
 // Edit a magicItem
+router.put('/:magicItemId', isLoggedIn, isInCampaign, canEditMagicItem, asyncHandler(async (req, res) => {
+	const { magicItemId } = req.params;
+	const magicItem = await MagicItem.findById(magicItemId)
+	res.status(200).json(magicItem)
+}))
 
 // Delete a magicItem
 

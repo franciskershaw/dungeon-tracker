@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Character = require('../models/Character');
 const Campaign = require('../models/Campaign');
 const CustomStat = require('../models/CustomStat');
+const MagicItem = require('../models/MagicItem');
 
 const isLoggedIn = asyncHandler(async (req, res, next) => {
   let token;
@@ -109,10 +110,39 @@ const isStatCreator = asyncHandler(async (req, res, next) => {
   }
 });
 
+// If the magicItem is owned by campaign - anyone can edit
+// If the magicItem is owned by a specific character - only that character's user can edit it
+const canEditMagicItem = asyncHandler(async (req, res, next) => {
+  const magicItem = await MagicItem.findById(req.params.magicItemId)
+  const campaign = await Campaign.findById(req.body.campaignId)
+  
+  try {
+    // If magicItem is owned by a campaign - anyone can edit
+    if (magicItem.ownedBy.toString() === campaign.id) {
+      console.log('This item is owned by the party and can be edited')
+      next()
+    }
+
+    // If the magic item is owned by a character, and logged in user owns that character - user can edit it
+    if (req.user.characters.includes(magicItem.ownedBy)) {
+      console.log('This item is owned by the character belonging to the current user - go ahead')
+      next()
+    }
+
+    // If neither of the above is true, throw an error
+    if ((magicItem.ownedBy.toString() !== campaign.id) && !(req.user.characters.includes(magicItem.ownedBy))) {
+      throw new Error("You're not allowed to edit someone else's magic item")
+    }  
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = {
   isLoggedIn,
   isCharacterCreator,
   isCampaignAdmin,
   isInCampaign,
   isStatCreator,
+  canEditMagicItem
 };
