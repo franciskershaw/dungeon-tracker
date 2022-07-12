@@ -26,4 +26,17 @@ router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 	}
 }))
 
+// Edit loot item
+router.put('/:lootItemId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { lootItemId } = req.params;
+
+	try {
+		const lootItem = await LootItem.findByIdAndUpdate(lootItemId, { ...req.body }, { new: true })
+		res.status(200).json(lootItem)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
 module.exports = router;
