@@ -52,4 +52,20 @@ router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async
 	}
 }))
 
+router.delete('/:lootItemId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	
+	const { lootItemId } = req.params;
+
+	try {
+		await LootItem.findByIdAndDelete(lootItemId)
+		await Campaign.updateOne(
+      { _id: req.body.campaignId },
+      { $pull: { lootItems: lootItemId } }
+    )
+		res.status(200).json({item: lootItemId, campaign: req.body.campaignId})
+	} catch (err) {
+		
+	}
+}))
+
 module.exports = router;
