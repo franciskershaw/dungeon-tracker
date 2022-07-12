@@ -36,4 +36,32 @@ router.put('/:npcId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) =>
 	}
 }))
 
+router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { campaignId } = req.params;
+	try {
+		const campaign = await Campaign.findById(campaignId)
+		const npcs = await NPC.find({ _id: campaign.nonPlayableCharacters })
+		res.status(200).json(npcs)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
+// Delete NPC
+router.delete('/:npcId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { npcId } = req.params;
+	try {
+		await NPC.findByIdAndDelete(npcId)
+		await Campaign.updateOne(
+      { _id: req.body.campaignId },
+      { $pull: { nonPlayableCharacters: npcId } }
+    )
+		res.status(200).json({npc: npcId, campaign: req.body.campaignId})
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
 module.exports = router;
