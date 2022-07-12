@@ -48,6 +48,16 @@ router.put('/:magicItemId', isLoggedIn, isInCampaign, canEditMagicItem, asyncHan
 }))
 
 // Delete a magicItem
+router.delete('/:magicItemId', isLoggedIn, isInCampaign, canEditMagicItem, asyncHandler(async (req, res) => {
+	const { magicItemId } = req.params;
+	try {
+		await MagicItem.findByIdAndDelete(magicItemId);
+		res.status(200).json(magicItemId)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
 
 // Get a user's magicItems
 

@@ -119,13 +119,11 @@ const canEditMagicItem = asyncHandler(async (req, res, next) => {
   try {
     // If magicItem is owned by a campaign - anyone can edit
     if (magicItem.ownedBy.toString() === campaign.id) {
-      console.log('This item is owned by the party and can be edited')
       next()
     }
 
     // If the magic item is owned by a character, and logged in user owns that character - user can edit it
     if (req.user.characters.includes(magicItem.ownedBy)) {
-      console.log('This item is owned by the character belonging to the current user - go ahead')
       next()
     }
 
