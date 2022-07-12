@@ -24,4 +24,16 @@ router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 	}
 }))
 
+router.put('/:npcId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { npcId } = req.params;
+
+	try {
+		const npc = await NPC.findByIdAndUpdate(npcId, { ...req.body }, { new: true })
+		res.status(200).json(npc)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
 module.exports = router;
