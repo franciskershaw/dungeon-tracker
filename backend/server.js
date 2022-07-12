@@ -29,6 +29,7 @@ app.use('/api/characters', require('./routes/characterRoutes'));
 app.use('/api/customStats', require('./routes/customStatRoutes'));
 app.use('/api/magicItems', require('./routes/magicItemRoutes'));
 app.use('/api/lootItems', require('./routes/lootItemRoutes'));
+app.use('/api/quests', require('./routes/questRoutes'));
 
 app.use(errorHandler);
 

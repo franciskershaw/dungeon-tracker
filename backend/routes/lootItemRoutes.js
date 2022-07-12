@@ -3,8 +3,7 @@ const router = express.Router();
 const asyncHandler = require('express-async-handler');
 
 const LootItem = require('../models/LootItem');
-const Campaign = require('../models/Campaign')
-const Character = require('../models/Character')
+const Campaign = require('../models/Campaign');
 
 const { isLoggedIn, isInCampaign } = require('../middleware/authMiddleware');
 
@@ -53,9 +52,7 @@ router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async
 }))
 
 router.delete('/:lootItemId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
-	
 	const { lootItemId } = req.params;
-
 	try {
 		await LootItem.findByIdAndDelete(lootItemId)
 		await Campaign.updateOne(
