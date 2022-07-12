@@ -36,4 +36,17 @@ router.put('/:questId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) 
 	}
 }))
 
+// Get all quests for a campaign
+router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { campaignId } = req.params;
+	try {
+		const campaign = await Campaign.findById(campaignId)
+		const quests = await Quest.find({ _id: campaign.quests })
+		res.status(200).json(quests)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
 module.exports = router;
