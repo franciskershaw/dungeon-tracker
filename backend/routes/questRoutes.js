@@ -24,4 +24,16 @@ router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 	}
 }))
 
+router.put('/:questId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { questId } = req.params;
+
+	try {
+		const quest = await Quest.findByIdAndUpdate(questId, { ...req.body }, { new: true })
+		res.status(200).json(quest)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
 module.exports = router;
