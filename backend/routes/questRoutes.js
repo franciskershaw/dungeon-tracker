@@ -49,4 +49,20 @@ router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async
 	}
 }))
 
+// Delete quest
+router.delete('/:questId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { questId } = req.params;
+	try {
+		await Quest.findByIdAndDelete(questId)
+		await Campaign.updateOne(
+      { _id: req.body.campaignId },
+      { $pull: { quests: questId } }
+    )
+		res.status(200).json({quest: questId, campaign: req.body.campaignId})
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
+
 module.exports = router;

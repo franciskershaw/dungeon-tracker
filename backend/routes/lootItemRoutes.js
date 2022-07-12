@@ -61,7 +61,8 @@ router.delete('/:lootItemId', isLoggedIn, isInCampaign, asyncHandler(async (req,
     )
 		res.status(200).json({item: lootItemId, campaign: req.body.campaignId})
 	} catch (err) {
-		
+		res.status(400)
+		throw new Error(err)
 	}
 }))
 
