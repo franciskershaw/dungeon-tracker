@@ -6,7 +6,7 @@ const MagicItem = require('../models/MagicItem')
 const Campaign = require('../models/Campaign')
 const Character = require('../models/Character')
 
-const { isLoggedIn, isInCampaign, canEditMagicItem } = require('../middleware/authMiddleware');
+const { isLoggedIn, isInCampaign, canEditMagicItem, isCharacterCreator } = require('../middleware/authMiddleware');
 
 // Add a new magicItem
 router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
@@ -60,7 +60,29 @@ router.delete('/:magicItemId', isLoggedIn, isInCampaign, canEditMagicItem, async
 }))
 
 // Get a user's magicItems
+router.get('/character/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async (req, res) => {
+	const { characterId } = req.params;
+	try {
+		const character = await Character.findById(characterId)
+		const magicItems = await MagicItem.find({ _id: character.magicItems })
+		res.status(200).json(magicItems)	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
 
 // Get a party's magicItems
+router.get('/campaign/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
+	const { campaignId } = req.params;
+	try {
+		const campaign = await Campaign.findById(campaignId)
+		const magicItems = await MagicItem.find({ _id: campaign.magicItems })
+		res.status(200).json(magicItems)
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
+}))
 
 module.exports = router;
