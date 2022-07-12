@@ -37,9 +37,9 @@ router.post('/:characterId', isLoggedIn, isCharacterCreator, asyncHandler(async 
 // Edit stat
 router.put('/:customStatId', isLoggedIn, isStatCreator, asyncHandler(async (req, res) => {
 	const { customStatId } = req.params;
-	const customStat = await CustomStat.findByIdAndUpdate(customStatId, { ...req.body }, {new: true})
 
 	try {
+		const customStat = await CustomStat.findByIdAndUpdate(customStatId, { ...req.body }, { new: true })
 		if (customStat.currentAmount > customStat.maxAmount) {
 			customStat.currentAmount = customStat.maxAmount
 		}

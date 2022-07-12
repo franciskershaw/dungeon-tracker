@@ -37,8 +37,14 @@ router.post('/', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 // Edit a magicItem
 router.put('/:magicItemId', isLoggedIn, isInCampaign, canEditMagicItem, asyncHandler(async (req, res) => {
 	const { magicItemId } = req.params;
-	const magicItem = await MagicItem.findById(magicItemId)
-	res.status(200).json(magicItem)
+
+	try {
+		const magicItem = await MagicItem.findByIdAndUpdate(magicItemId, { ...req.body }, { new: true })
+		res.status(200).json(magicItem)	
+	} catch (err) {
+		res.status(400)
+		throw new Error(err)
+	}
 }))
 
 // Delete a magicItem
