@@ -4,7 +4,7 @@ const Error = () => {
 	return (
 		<div>
 			Oops - don't think you meant to come here
-			<Link to={'home'}>
+			<Link to={'/'}>
 				Go home
 			</Link>
 		</div>

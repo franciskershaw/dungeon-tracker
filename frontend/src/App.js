@@ -1,17 +1,22 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LandingPage from './pages/LandingPage/LandingPage';
-import HomePage from './pages/HomePage/HomePage';
-import CampaignPage from './pages/CampaignPage/Campaign';
+import SharedLayout from './layout/SharedLayout';
+import LoginPage from './pages/LoginPage/LoginPage';
+import RegisterPage from './pages/RegisterPage/RegisterPage';
+import CampaignsHomePage from './pages/CampaignsHomePage/CampaignsHomePage';
+import CampaignDashboard from './pages/CampaignDashboard/CampaignDashboard';
 import Error from './pages/Error/Error';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="home" element={<HomePage />} />
-        <Route path="campaign" element={<CampaignPage />} />
-        <Route path="*" element={<Error />} />
+        <Route path="/" element={<SharedLayout />}>
+          <Route index element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="campaigns" element={<CampaignsHomePage />}/>
+          <Route path="campaigns/:id" element={<CampaignDashboard />}/>
+          <Route path="*" element={<Error />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
