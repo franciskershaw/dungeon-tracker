@@ -20,6 +20,7 @@ const RegisterPage = () => {
     (state) => state.auth
   );
 
+
   useEffect(() => {
     if (isError) {
       console.log(message);
