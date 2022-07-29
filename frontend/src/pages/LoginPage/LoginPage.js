@@ -23,6 +23,7 @@ const LoginPage = () => {
       console.log(message);
     }
     if (isSuccess || user) {
+      console.log('SUCCESS')
       navigate('campaigns');
     }
 
