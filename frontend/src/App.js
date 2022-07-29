@@ -8,17 +8,19 @@ import Error from './pages/Error/Error';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<SharedLayout />}>
-          <Route index element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="campaigns" element={<CampaignsHomePage />}/>
-          <Route path="campaigns/:id" element={<CampaignDashboard />}/>
-          <Route path="*" element={<Error />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SharedLayout />}>
+            <Route index element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+            <Route path="campaigns" element={<CampaignsHomePage />} />
+            <Route path="campaigns/:id" element={<CampaignDashboard />} />
+            <Route path="*" element={<Error />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
