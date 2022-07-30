@@ -2,16 +2,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../../features/auth/authSlice';
 import styles from './Navbar.module.scss';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const NavBar = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-
-  const mobileMenuRef = useRef();
-  const mobileBtn = useRef();
 
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
 
@@ -49,7 +46,6 @@ const NavBar = () => {
         <div className="hidden md:block">
           <button
             onClick={() => setMobileMenuActive(!mobileMenuActive)}
-            ref={mobileBtn}
             className={`${styles.hamburger} ${
               mobileMenuActive && styles.open
             } focus:outline-none`}>

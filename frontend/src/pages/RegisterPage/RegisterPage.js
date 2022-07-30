@@ -28,7 +28,7 @@ const RegisterPage = () => {
     }
 
     if (isSuccess || user) {
-      navigate('campaigns');
+      navigate('/campaigns');
     }
 
     dispatch(reset());

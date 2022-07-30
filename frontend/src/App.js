@@ -13,12 +13,12 @@ function App() {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="campaigns" element={<PrivateRoute />}>
-            <Route path="campaigns" element={<CampaignsHomePage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/campaigns" element={<PrivateRoute />}>
+            <Route path="/campaigns" element={<CampaignsHomePage />} />
           </Route>
-          <Route path="campaigns/:campaignId" element={<PrivateRoute />}>
-            <Route path="campaigns/:campaignId" element={<CampaignDashboard />} />
+          <Route path="/campaigns/:campaignId" element={<PrivateRoute />}>
+            <Route path="/campaigns/:campaignId" element={<CampaignDashboard />} />
           </Route>
           <Route path="*" element={<Error />} />
         </Route>
