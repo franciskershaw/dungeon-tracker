@@ -6,7 +6,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#FA2C02",
+        primary: "#BD1537",
+      },
+      fontFamily: {
+        body: ['Roboto', 'sans-serif'],
       }
     },
   },
