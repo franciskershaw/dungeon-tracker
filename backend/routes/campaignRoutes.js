@@ -3,17 +3,17 @@ const router = express.Router();
 const asyncHandler = require('express-async-handler');
 const { v4: uuidv4 } = require('uuid');
 
-const { isLoggedIn, isCampaignAdmin } = require('../middleware/authMiddleware');
+const { isLoggedIn, isCampaignAdmin, isInCampaign } = require('../middleware/authMiddleware');
 
 const User = require('../models/User');
 const Campaign = require('../models/Campaign');
 
-// Get all campaigns from DB (DELETE THIS ROUTE BEFORE DEPLOYMENT)
-router.get('/', asyncHandler(async (req, res) => {
+// Get single campaign
+router.get('/:campaignId', isLoggedIn, isInCampaign, asyncHandler(async (req, res) => {
 	try {
-		const campaigns = await Campaign.find();
-		res.status(200).json(campaigns)
-	} catch (err) {
+		const campaign = await Campaign.findById(req.params.campaignId)
+		res.status(200).json(campaign)
+	} catch (error) {
 		console.log(err)
 		throw new Error(err)
 	}
@@ -34,7 +34,7 @@ router.post('/', isLoggedIn, asyncHandler(async (req, res) => {
 		res.status(201).json(campaign)
 	} catch (err) {
 		console.log(err)
-		throw new Error('Unable to create a new campaign')
+		throw new Error(err)
 	}
 }))
 
@@ -48,7 +48,7 @@ router.get('/user/:userId', isLoggedIn, asyncHandler(async (req, res) => {
 		res.status(200).json(user.campaigns)
 	} catch (err) {
 		console.log(err)
-		throw new Error("Unable to get user's joined campaigns")
+		throw new Error(err)
 	}
 }))
 
