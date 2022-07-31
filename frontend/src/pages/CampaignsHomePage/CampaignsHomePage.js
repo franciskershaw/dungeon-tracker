@@ -1,15 +1,26 @@
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { fetchCampaign } from '../../queries/requests';
 
 const CampaignsHomePage = () => {
-  const [campaigns, setCampaigns] = useState(null)
+  const [campaigns, setCampaigns] = useState([]);
 
   const { user } = useSelector((state) => state.auth);
 
-  // need to get all of the user's campaign details into state
-  useEffect(() => {
+  const getCampaigns = () => {
+    user.campaigns.forEach(async (campaign) => {
+      const response = await fetchCampaign(user.token, campaign);
+      setCampaigns([...campaigns, response]);
+    });
+  };
 
-  },[])
+  useEffect(() => {
+    getCampaigns();
+  }, []);
+
+  useEffect(() => {
+    console.log(campaigns);
+  }, [campaigns]);
 
   return (
     <div>
