@@ -65,6 +65,8 @@ router.post('/login', asyncHandler(async (req, res) => {
 							_id: user._id,
 							name: user.userName,
 							email: user.email,
+							campaigns: user.campaigns,
+							characters: user.characters,
 							token: generateToken(user._id),
 					})
 			} else {
