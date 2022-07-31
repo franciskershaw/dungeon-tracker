@@ -5,7 +5,6 @@ export const fetchCampaign = async (token, campaignId) => {
   const requestOptions = {
     method: 'GET',
     headers: myHeaders,
-    // redirect: 'follow',
   };
 
   try {
@@ -13,8 +12,6 @@ export const fetchCampaign = async (token, campaignId) => {
 		if (response.status === 200) {
 			let data = response.json()
 			return data;
-		} else {
-			throw new Error('Unable to fetch campaign')
 		}
   } catch (err) {
 		console.log(err)

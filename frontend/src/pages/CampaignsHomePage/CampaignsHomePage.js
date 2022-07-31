@@ -7,6 +7,14 @@ const CampaignsHomePage = () => {
 
   const { user } = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    getCampaigns();
+  }, []);
+
+  useEffect(() => {
+    console.log(campaigns)
+  },[campaigns])
+
   const getCampaigns = () => {
     user.campaigns.forEach(async (campaign) => {
       const response = await fetchCampaign(user.token, campaign);
@@ -14,19 +22,10 @@ const CampaignsHomePage = () => {
     });
   };
 
-  useEffect(() => {
-    getCampaigns();
-  }, []);
-
-  useEffect(() => {
-    console.log(campaigns);
-  }, [campaigns]);
-
   return (
     <div>
       <h2>
-        I am the Campaign page were you can see your campaigns and join/create
-        new ones
+        Welcome, {user.name}
       </h2>
     </div>
   );
