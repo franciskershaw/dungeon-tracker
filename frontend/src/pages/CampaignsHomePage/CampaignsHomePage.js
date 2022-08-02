@@ -25,18 +25,40 @@ const CampaignsHomePage = () => {
 
   return (
     <div className="page-content">
-      <section id="heading" className='mt-5 mb-2 md:mb-8 pl-3 md:pl-14 md:mt-20 lg:mt-24 lg:mb-14'>
+      <section
+        id="heading"
+        className="mt-5 mb-2 md:mb-8 pl-3 md:pl-14 md:mt-20 lg:mt-24 lg:mb-14">
         <h2 className="text-2xl md:text-3xl lg:text-4xl">
           Welcome, {user.name}
         </h2>
       </section>
 
-      <section id="buttons" className='flex w-full md:items-center justify-center'>
-        <button className='btn flex-grow md:flex-grow-0 md:mr-5 md:text-xl lg:text-2xl lg:mr-24 lg:p-5'>Join Campaign</button>
-        <button className='btn flex-grow md:flex-grow-0 md:ml-5 md:text-xl lg:text-2xl lg:ml-24 lg:p-5'>Create Campaign</button>
+      <section
+        id="buttons"
+        className="flex w-full md:items-center justify-center">
+        <button className="btn flex-grow md:flex-grow-0 md:mr-5 md:text-xl lg:text-2xl lg:mr-24 lg:p-5">
+          Join Campaign
+        </button>
+        <button className="btn flex-grow md:flex-grow-0 md:ml-5 md:text-xl lg:text-2xl lg:ml-24 lg:p-5">
+          Create Campaign
+        </button>
       </section>
 
-      <section id="currentCampaigns"></section>
+      <section id="currentCampaigns" className='training-wheels'>
+        {campaigns.length ? (
+          campaigns.map((campaign) => (
+            <>
+              <p>{campaign.name}</p>
+              <p>Users: {campaign.users.length}</p>
+            </>
+          ))
+        ) : (
+          <p>
+            You've not joined a campaign yet, join one or create a brand new
+            campaign for others to join!
+          </p>
+        )}
+      </section>
     </div>
   );
 };

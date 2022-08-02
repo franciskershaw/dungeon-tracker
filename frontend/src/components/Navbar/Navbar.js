@@ -26,7 +26,7 @@ const NavBar = () => {
 
   return (
     <header>
-      <nav className="navbar pl-8 pr-5 md:pr-8 flex items-center justify-between bg-primary shadow-md text-white tracking-wide text-2xl ">
+      <nav className="navbar border border-white pl-8 pr-5 md:pr-8 flex items-center justify-between bg-primary shadow-lg text-white tracking-wide text-2xl ">
         <Link className="font-bold" to={'campaigns'}>
           <FontAwesomeIcon icon={faDiceD20} />{' '}
           <span className="ml-2">Dungeon Tracker!</span>
