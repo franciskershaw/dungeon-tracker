@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../../features/auth/authSlice';
 import styles from './Navbar.module.scss';
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiceD20 } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -24,9 +26,10 @@ const NavBar = () => {
 
   return (
     <header>
-      <nav className="flex items-center justify-between bg-primary p-3 pr-4 shadow-md text-white text-lg tracking-wide">
+      <nav className="flex items-center justify-between bg-primary p-4 pr-5 shadow-md text-white tracking-wide text-xl">
         <Link className="pl-8 font-bold" to={'campaigns'}>
-          Dungeon Tracker!
+          <FontAwesomeIcon icon={faDiceD20} />{' '}
+          <span className="ml-2">Dungeon Tracker!</span>
         </Link>
         <ul className="flex space-x-7 pr-8 md:hidden">
           {user ? (
@@ -57,7 +60,6 @@ const NavBar = () => {
         </div>
 
         {/* Mobile menu */}
-        
       </nav>
     </header>
   );

@@ -9,11 +9,12 @@ const CampaignsHomePage = () => {
 
   useEffect(() => {
     getCampaigns();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    console.log(campaigns)
-  },[campaigns])
+    console.log(campaigns);
+  }, [campaigns]);
 
   const getCampaigns = () => {
     user.campaigns.forEach(async (campaign) => {
@@ -23,8 +24,8 @@ const CampaignsHomePage = () => {
   };
 
   return (
-    <div>
-      <h2>
+    <div className="container mx-auto">
+      <h2 className="text-xl">
         Welcome, {user.name}
       </h2>
     </div>
