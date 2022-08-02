@@ -4,14 +4,27 @@
 @tailwind components;
 @tailwind utilities;
 
-// reset
-@import 'styles/base/reset';
-
-
 // base
+@import 'styles/reset';
+@import 'styles/variables';
+@import 'styles/containers';
+
 @layer base {
-	body {
-		@apply font-ibarra;
+  body {
+    @apply font-ibarra;
+  }
+
+  .training-wheels {
+    border: black 1px solid;
+    background: rgba(200, 200, 200, 0.2);
+  }
+
+	.navbar {
+		height: $headerHeight;
+	}
+
+	.page-content {
+		min-height: calc(100vh - $headerHeight);
 	}
 }
 
@@ -19,4 +32,3 @@
 // @import 'styles/abstracts/mixins';
 
 // Components
-

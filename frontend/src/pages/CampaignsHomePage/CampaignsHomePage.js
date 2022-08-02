@@ -24,9 +24,9 @@ const CampaignsHomePage = () => {
   };
 
   return (
-    <div className="container mx-auto">
-      <h2 className="text-xl">
-        Welcome, {user.name}
+    <div className="container page-content">
+      <h2 className="font-roboto text-xl md:text-2xl lg:text-3xl">
+        Welcome, {user.name} 
       </h2>
     </div>
   );

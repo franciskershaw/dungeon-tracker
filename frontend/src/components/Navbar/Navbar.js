@@ -26,12 +26,12 @@ const NavBar = () => {
 
   return (
     <header>
-      <nav className="flex items-center justify-between bg-primary p-4 pr-5 shadow-md text-white tracking-wide text-xl">
-        <Link className="pl-8 font-bold" to={'campaigns'}>
+      <nav className="navbar pl-8 pr-5 md:pr-8 flex items-center justify-between bg-primary shadow-md text-white tracking-wide text-2xl ">
+        <Link className="font-bold" to={'campaigns'}>
           <FontAwesomeIcon icon={faDiceD20} />{' '}
           <span className="ml-2">Dungeon Tracker!</span>
         </Link>
-        <ul className="flex space-x-7 pr-8 md:hidden">
+        <ul className="hidden space-x-7 md:flex">
           {user ? (
             <li onClick={onLogout}>Logout</li>
           ) : (
@@ -46,9 +46,9 @@ const NavBar = () => {
           )}
         </ul>
         {/* Hamburger button */}
-        <div className="hidden md:block">
+        <div className="md:hidden">
           <button
-            onClick={() => setMobileMenuActive(!mobileMenuActive)}
+            onClick={() => setMobileMenuActive((prevState)=>!prevState)}
             className={`${styles.hamburger} ${
               mobileMenuActive && styles.open
             } focus:outline-none`}>
