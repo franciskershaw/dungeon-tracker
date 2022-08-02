@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply font-ibarra;
+    @apply font-ibarra bg-background;
   }
 
   .training-wheels {
@@ -25,10 +25,10 @@
 
 	.page-content {
 		min-height: calc(100vh - $headerHeight);
+		@apply max-w-screen-xl mx-auto;
+	}
+
+	.btn {
+		@apply border rounded-sm p-4 bg-primary text-white shadow-2xl;
 	}
 }
-
-// Abstracts
-// @import 'styles/abstracts/mixins';
-
-// Components
